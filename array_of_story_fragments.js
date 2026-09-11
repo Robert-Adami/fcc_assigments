@@ -91,7 +91,7 @@ function fillMissingFragments(arr) {
  
 const filledFragments = fillMissingFragments(dedupedFragments);
  
-// spojí texty všetkých fragmentov novými riadkami do jedného stringu
+// spojí texty všetkých fragmentov novými riadkami do jedného string
 function assembleStory(arr) {
   return arr.map((obj) => obj.text).join("\n");
 }
