@@ -79,7 +79,41 @@ findIndex prejde pole od začiatku a zastaví sa na prvom item, ktorého trackId
 Ak je ten index rovnaký ako index z filtra, je to prvý výskyt → nechaj. Ak nie, je to kópia → vyhoď.
  */
 function dedupeTracks(arrObj) {
-  return arrObj.filter((elem, index) => arrObj.findIndex(item => item.trackId === elem.trackId) === index)
+  return arrObj.filter((elem, index) => arrObj.findIndex(item => item.trackId === elem.trackId) === index);
 }
 
 //console.log(dedupeTracks(scoreTracks(flattenPlaylists(playlists))))
+function enforceArtistQuota(arrObj, maxArtists) {
+  const result = [];
+  const count = {
+
+  };
+
+  for(let i = 0; i < arrObj.length; i++) {
+    const pocet = count[arrObj[i].artist] || 0; // počet umelcov alebo 0
+    if(pocet < maxArtists) {
+      result.push(arrObj[i]);
+      count[arrObj[i].artist] = pocet + 1; //pridá konkrétnemu umelcovi + 1 koľkokrát sa objavil v playliste
+    }
+  }
+  return result
+}
+
+//console.log(enforceArtistQuota(dedupeTracks(scoreTracks(flattenPlaylists(playlists))), 1))
+
+function buildSchedule(arrObj) {
+  const result = [];
+
+  for(let i = 0; i < arrObj.length; i++) {
+    result.push({slot: i + 1, trackId: arrObj[i].trackId});
+  }
+  return result
+}
+
+//console.log(buildSchedule(enforceArtistQuota(dedupeTracks(scoreTracks(flattenPlaylists(playlists))), 1)))
+
+function remixPlaylist(arrObj, maxArtists){
+  return buildSchedule(enforceArtistQuota(dedupeTracks(scoreTracks(flattenPlaylists(arrObj))), maxArtists))
+}
+
+console.log(remixPlaylist(playlists, 1))
